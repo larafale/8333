@@ -1,0 +1,5 @@
+{
+  "name": "web",
+  "type": "npm",
+  "dotenv": ".env.production"
+}
