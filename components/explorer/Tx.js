@@ -83,11 +83,6 @@ export default class Tx extends Component {
         )}
         </tbody>
       </table>
-        
-
-      <style jsx>{`
-
-      `}</style>
 
     </div>)
   }

@@ -4,8 +4,8 @@ import Link from 'next/link'
 import _ from 'lodash'
 import { getContext } from 'recompose'
 
-import Shops from './Shops'
-import Shop from './Shop'
+import Wallets from './Wallets'
+import Wallet from './Wallet'
 
 @getContext({
   server: PropTypes.func,
@@ -13,29 +13,29 @@ import Shop from './Shop'
   user: PropTypes.object,
   setPanel: PropTypes.func,
 })
-export default class ShopsPanel extends Component {
+export default class WalletsPanel extends Component {
 
   constructor(props){
     super(props)
 
     this.state = { edit: false }
 
-    this.editShop = this.editShop.bind(this)
+    this.editWallet = this.editWallet.bind(this)
   }
 
   componentDidMount() {
     const { server, serverError } = this.props
 
-    // server.get(`/shops`)
-    //   .then(({data}) => this.setState({ shops: data }))
+    // server.get(`/wallets`)
+    //   .then(({data}) => this.setState({ wallets: data }))
     //   .catch(e => {
     //     serverError(e)
     //   })
 
   }
 
-  editShop(shop) {
-    this.setState({ edit: shop || false })
+  editWallet(wallet) {
+    this.setState({ edit: wallet || false })
   }
 
   render() {
@@ -45,12 +45,9 @@ export default class ShopsPanel extends Component {
 
     return (<div className="">
 
-      { !edit && <Shops editShop={this.editShop} />}
-      { edit && <Shop shop={edit} editShop={this.editShop} />}
+      { !edit && <Wallets editWallet={this.editWallet} />}
+      { edit && <Wallet wallet={edit} editWallet={this.editWallet} />}
 
-      <style jsx>{`
-          
-      `}</style>  
 
     </div>)
 

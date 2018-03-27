@@ -10,11 +10,6 @@ export default class BillingPanel extends Component {
 
     return (<div className="box">
       <h1 className="title">Billing</h1>
-
-      <style jsx>{`
-          
-      `}</style>  
-
     </div>)
 
   }

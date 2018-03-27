@@ -48,21 +48,22 @@ export default class Header extends Component {
                   <a className="nav-link">Explorer</a>
                 </Link>
               </li>
-              <li className={`nav-item ${page=='app'&&'active'}`}>
-                <Link href="/app?page=app" as="/app">
-                  <a className="nav-link">App</a>
+              <li className={`nav-item ${page=='docs'&&'active'}`}>
+                <Link href="/app?page=docs" as="/docs">
+                  <a className="nav-link">Docs</a>
                 </Link>
               </li>
-              <li className="nav-item d-flex align-items-center">
-                <UserMenu />
-              </li>
-              { !authed && <li className="nav-item d-flex align-items-center">
-                  <a className="nav-link">Louis</a>
-              </li>}
-              { authed && <li className="nav-item d-flex align-items-center cursor">
-                  <a onClick={()=>setToken('')} className="nav-link d-flex">
-                    <i className="fa fa-sign-out" />
+              <li className={`nav-item ${page=='app'&&'active'}`}>
+                <Link href="/app?page=app&panel=invoices" as="/app">
+                  <a className="nav-link">
+                    { authed ? 'Dashboard' : 'Dashboard' }
                   </a>
+                </Link>
+              </li>
+              { authed && <li className="nav-item d-flex align-items-center cursor">
+                <a title="sign out" onClick={()=>setToken('')} className="nav-link d-flex">
+                  <i className="fa fa-sign-out" />
+                </a>
               </li>}
             </ul>
           </div>

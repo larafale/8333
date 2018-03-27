@@ -18,7 +18,10 @@ export default class InvoicesPanel extends Component {
   constructor(props){
     super(props)
 
-    this.state = { edit: false }
+    this.state = { 
+        edit: false 
+      , wallets: []
+    }
 
     this.editInvoice = this.editInvoice.bind(this)
   }
@@ -26,12 +29,11 @@ export default class InvoicesPanel extends Component {
   componentDidMount() {
     const { server, serverError } = this.props
 
-    // server.get(`/invoices`)
-    //   .then(({data}) => this.setState({ invoices: data }))
-    //   .catch(e => {
-    //     serverError(e)
-    //   })
-
+    server.get(`/wallets`)
+      .then(({data}) => this.setState({ wallets: data }))
+      .catch(e => {
+        serverError(e)
+      })
   }
 
   editInvoice(invoice) {
@@ -41,16 +43,12 @@ export default class InvoicesPanel extends Component {
   render() {
 
     const { setPanel } = this.props
-    const { edit } = this.state
+    const { edit, wallets } = this.state
 
     return (<div className="">
 
-      { !edit && <Invoices editInvoice={this.editInvoice} />}
-      { edit && <Invoice invoice={edit} editInvoice={this.editInvoice} />}
-
-      <style jsx>{`
-          
-      `}</style>  
+      { !edit && <Invoices wallets={wallets} editInvoice={this.editInvoice} />}
+      { edit && <Invoice wallets={wallets} invoice={edit} editInvoice={this.editInvoice} />}
 
     </div>)
 

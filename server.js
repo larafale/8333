@@ -6,23 +6,31 @@ const next =  require('next')
 require('isomorphic-fetch')
 
 
-const app = next({ dev: process.env.NODE_ENV === 'local' })
+const app = next({ dev: process.env.NODE_ENV == 'local' })
 const handle = app.getRequestHandler()
+
+const rule = (url, query) => get(url, (req, res) => {
+  const q = typeof query == 'function' ? query(req) : query || {}
+  return app.render(req, res, '/app', { ...req.params, ...req.query, ...q })
+})
 
 
 app.prepare().then(() => {
 
   const microHandler = router(
 
-    // get('/api/*', redirect('https://partners.inmemori.com')),
-    // get('/favicon.ico', (req, res) => app.serveStatic(req, res, `./static/favicon.ico`)),
+    get('/favicon.ico', (req, res) => app.serveStatic(req, res, `./static/favicon.ico`)),
     get('/robots.txt', (req, res) => app.serveStatic(req, res, `./static/robots.txt`)),
 
-    get('/', (req, res) => app.render(req, res, '/app', { page: 'site' })),
-    get('/explorer', (req, res) => app.render(req, res, '/app', { page: 'explorer' })),
-    get('/app', (req, res) => app.render(req, res, '/app', { page: 'app' })),
-
-
+    get('/', (req, res) => redirect('http://ready.very.soon')(req, res)),
+    rule('/home', { page: 'site' }),
+    rule('/docs', { page: 'docs' }),
+    rule('/explorer', { page: 'explorer' }),
+    rule('/login/*', req => ({ page: 'app', jwt: req.params._ })),
+    rule('/app', { page: 'app' }),
+    rule('/app/:panel', { page: 'app' }),
+    rule('/invoice/:id', { page: 'invoice' }),
+    rule('/widget/:id', { page: 'widget' }),
     
     get('/*', (req, res) => handle(req, res))
   )

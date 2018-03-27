@@ -38,7 +38,7 @@ export default class BlackBox extends Component {
 
     spinOn(cta)
 
-    server.post(`/auth/token`, form)
+    server.post(`/auth/supertoken`, form)
       .then(({data}) => setToken(data.jwt))
       .catch(serverError)
       .finally(spinOff(cta))
@@ -72,7 +72,7 @@ export default class BlackBox extends Component {
               </div>
               <a onClick={this.save} className="btn btn-sm btn-warning" href='javascript:'>
                 <i className="fa fa-refresh fa-spin mr-3 d-none" />
-                Login
+                Log As
               </a>
             </div>
           </div>

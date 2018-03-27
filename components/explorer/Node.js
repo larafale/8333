@@ -67,14 +67,10 @@ export default class Node extends Component {
           </tr>
           <tr>
             <th>Host</th>
-            <td className="text-right">{api}</td>
+            <td className="text-right">{api || node.host}</td>
           </tr>
         </tbody>
       </table>
-
-      <style jsx>{`
-
-      `}</style>
 
     </div>)
   }

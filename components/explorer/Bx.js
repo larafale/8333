@@ -22,7 +22,7 @@ export default class Bx extends Component {
   static defaultProps = {} 
   state = { 
       blocks: Pile(5, [])
-    , tip: 0
+    , tip: { height: 0, ts: 0 }
     , pause: false 
   }
     
@@ -86,7 +86,7 @@ export default class Bx extends Component {
       <div className="my-4">
         <i className={`fa fa-cube`} />
         <strong> Blocks</strong>
-        <small> ({tip})</small>
+        <small> ({tip.height})</small>
       </div>
 
       <table className="table table-sm table-hover">
@@ -111,11 +111,6 @@ export default class Bx extends Component {
         )}
         </tbody>
       </table>
-        
-
-      <style jsx>{`
-
-      `}</style>
 
     </div>)
   }

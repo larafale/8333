@@ -1,0 +1,427 @@
+swagger: "2.0"
+basePath: "/"
+x-servers:
+  - url: https://api.8333.io
+    description: "mainnet"
+  - url: https://testnet.8333.io
+    description: "testnet"
+info:
+  description: |
+
+    # Overview
+
+    <br>
+    ### Server
+
+    Url | Info
+    ----|-----
+    https://api.8333.io | mainnet context 
+    https://testnet.8333.io | testnet context 
+    
+    <br>
+    ### Authentication
+
+    You can authenticate with 8333.io API via the use of **api keys**. You can generate as many api keys as you want. Note that api keys are never stored in 8333.io database. They are generated on the fly, signed by 8333, and use the [JWT](https://jwt.io) standard RFC 7519 token specification.
+
+
+    An `apikey` can be passed in the `body`, `query` or `header` of the request, always under the parameter name `apikey`.
+    
+    <br>
+    ### Errors
+
+    The API uses standard HTTP status codes to indicate the success or failure of the API call.
+    The body of the response will be JSON in the following format:
+    <br>
+    <br>
+    ```
+    { 
+      "error": "invalid apikey" 
+    }
+    ```
+  title: "Documentation"
+  version: "1.0.0"
+  contact:
+    email: "yo@8333.io"
+tags:
+- name: "prices"
+  description: |
+    All princing utilities uses a live `price index` calculated on the fly from multiple sources. The number of sources used at calculation can vary because not all sources provides the currency/pair requested.
+    <br>
+    <br>
+    Actual sources: `bitfinex`, `bitstamp`, `coinbase`, `okcoin` 
+    <br>
+    <br>
+    There is 2 types of tickers :
+    <br>
+    - BTC tickers  => `btc`, `mbtc`, `satoshis`
+    - Fiat tickers => `usd`, `eur`, `jpy`, `gbp`, `cad`
+- name: "users"
+  description: "Manage your 8333.io account"
+- name: "wallets"
+  description: |
+    Each wallet is associated with one unique `xpubkey`. You can safely update a wallet `xpubkey` as long has the wallet has not received any funds yet.
+- name: "invoices"
+  description: "Everything about Invoices"
+paths:
+  /prices/{fiat_ticker}:
+    get:
+      tags: ["prices"]
+      summary: "Bitcoin price"
+      operationId: "getPrice"
+      parameters:
+      - name: "fiat_ticker"
+        in: "path"
+        type: "string"
+        required: true
+      responses:
+        200:
+          description: success
+          schema:
+            $ref: '#/definitions/BtcPrice'
+      x-code-samples:
+      - lang: curl
+        source: |
+          curl "https://api.8333.io/prices/eur"
+  /prices/{amount}/{ticker}:
+    get:
+      tags: ["prices"]
+      summary: "Price snapshot"
+      description: |
+        Return prices informations given an `amount` & a `ticker`. Informations consist of the amount priced in bitcoin and fiat, it also return the timestamp of the snapshot.
+      operationId: "priceSnapshot"
+      parameters:
+      - name: "amount"
+        in: "path"
+        type: "number"
+        format: "float"
+        required: true
+      - name: "ticker"
+        in: "path"
+        type: "string"
+        required: true
+        description: |
+          BTC tickers  => `btc`,`mbtc`,`satoshis`
+          <br>
+          Fiat tickers => `usd`,`eur`,`jpy`,`gbp`,`cad`
+          <br>
+          <br>
+          When using a BTC ticker, you can also specify a Fiat ticker to check against like this `{btc_ticker}-{fiat_ticker}`. ex:
+          <br>
+          <br>
+          ```
+          /prices/340000/satoshis-jpy
+          ```
+          Default `fiat_ticker` is `usd`. so for exemple `mbtc` is the same as `mbtc-usd`
+      x-code-samples:
+      - lang: curl
+        source: |
+          curl "https://api.8333.io/prices/0.2/btc"
+      responses:
+        200:
+          description: success
+          schema:
+            $ref: '#/definitions/Price'
+  /users:
+    put:
+      tags: ["users"]
+      summary: "Update profile"
+      operationId: "putUser"
+      consumes: ["application/json"]
+      produces: ["application/json"]
+      parameters:
+      - name: "body"
+        in: "body"
+        required: true
+        schema:
+          $ref: "#/definitions/UserUpdate"
+      responses:
+        200:
+          description: success
+          schema:
+            $ref: '#/definitions/User'
+  /wallets:
+    post:
+      tags: ["wallets"]
+      summary: "Create wallet"
+      description: ""
+      operationId: "postWallet"
+      consumes: ["application/json"]
+      produces: ["application/json"]
+      parameters:
+      - in: body
+        schema:
+          type: object
+          required:
+            - name
+            - xpub
+          properties:
+            name:
+              type: string
+              example: "The Moon Wallet"
+            xpub:
+              type: string
+              example: "xpub661MyMw.....Mr7XscfK"
+      x-code-samples:
+      - lang: curl
+        source: |
+          curl -X POST "https://api.8333.io/wallets" \
+            -H 'content-type: application/json' \
+            -d '{ "name": "My Shop" }'
+    put:
+      tags: ["wallets"]
+      summary: "Update wallet"
+      description: ""
+      operationId: "putWallet"
+      consumes: ["application/json"]
+      produces: ["application/json"]
+      parameters:
+      - in: body
+        schema:
+          type: object
+          properties:
+            name:
+              type: string
+              example: "The Moon Wallet"
+            xpub:
+              type: string
+              example: "xpub661MyMw.....Mr7XscfK"
+  /invoices:
+    post:
+      tags: ["invoices"]
+      summary: "Create invoice"
+      operationId: "postInvoice"
+      consumes: ["application/json"]
+      produces: ["application/json"]
+      parameters:
+      - in: body
+        schema:
+          $ref: '#/definitions/InvoiceCreate'
+      responses:
+        '200':
+          description: success
+          schema:
+            $ref: '#/definitions/Invoice'
+      x-code-samples:
+      - lang: curl
+        source: |
+          curl -X POST "https://api.8333.io/invoices" \
+            -H 'content-type: application/json' \
+            -d '{ "wid": "HyL0n1eBz", "amount": { "value": 0.2, "ticker": "btc" } }'
+  /invoices/{id}:
+    put:
+      tags: ["invoices"]
+      summary: "Update invoice"
+      operationId: "putInvoice"
+      consumes: ["application/json"]
+      produces: ["application/json"]
+      parameters:
+      - in: body
+        schema:
+          type: object
+          properties:
+            amount:
+              type: object
+              properties:
+                value:
+                  type: "number"
+                  format: "float"
+                  example: 0.2
+                ticker:
+                  type: "string"
+                  example: "btc"
+                  description: |
+                    Fiat ticker => `usd`,`eur`,`jpy`,`gbp`,`cad`
+                    <br>
+                    BTC ticker  => `btc`,`mbtc`,`satoshis`
+                    <br>
+                    <br>
+                    Defaults to wallet `ticker`
+                fiat_ticker:
+                  type: "string"
+                  example: "usd"
+                  description: |
+                    Defaults to wallet `fiat_ticker`
+      responses:
+        200:
+          description: success
+          schema:
+            $ref: '#/definitions/Invoice'
+
+definitions:
+  User:
+    type: "object"
+    properties:
+      id:
+        type: "string"
+        example: "rJSNZklHz"
+      email:
+        type: "string"
+        format: "email"
+        example: "batman@gmail.com"
+      firstname:
+        type: "string"
+        example: "Bruce"
+      lastname:
+        type: "string"
+        example: "Wayne"
+      company:
+        type: "string"
+        example: "Wayne Enterprises"
+  UserUpdate:
+    type: "object"
+    properties:
+      email:
+        type: "string"
+        format: "email"
+        example: "batman@gmail.com"
+      firstname:
+        type: "string"
+        example: "Bruce"
+      lastname:
+        type: "string"
+        example: "Wayne"
+      company:
+        type: "string"
+        example: "Wayne Enterprises"
+  Wallet:
+    type: "object"
+    required:
+    - "name"
+    properties:
+      id:
+        type: "string"
+        example: "HyL0n1eBz"
+      name:
+        type: "string"
+        example: "The Moon ☾ Wallet"
+  Invoice:
+    type: "object"
+    required:
+    - "wid"
+    properties:
+      id:
+        type: "string"
+        example: "zyVgt1lHf"
+        description: "Invoice id"
+      wid:
+        type: "string"
+        example: "HyL0n1eBz"
+        description: "Wallet id"
+      address:
+        type: "string"
+        example: "1Eztd9KpVXsbqFKeTDQ67NuXxh7Mq71uYp"
+      price:
+        $ref: '#/definitions/Price'
+      eat:
+        type: "string"
+        format: "date-time"
+        example: "2018-01-19T22:20:32.275Z"
+        description: "Expiration date"
+      status:
+        type: "string"
+        description: "Invoice status"
+        enum:
+        - "pending"
+        - "confirmed"
+        - "expired"
+  InvoiceCreate:
+    type: "object"
+    required: 
+    - wid
+    properties:
+      wid:
+        type: "string"
+        example: "HyL0n1eBz"
+        description: "Wallet id"
+      amount:
+        type: object
+        properties:
+          value:
+            type: "number"
+            format: "float"
+            example: 0.2
+          ticker:
+            type: "string"
+            example: "btc"
+            description: |
+              Fiat ticker => `usd`,`eur`,`jpy`,`gbp`,`cad`
+              <br>
+              BTC ticker  => `btc`,`mbtc`,`satoshis`
+              <br>
+              <br>
+              Defaults to wallet `ticker`
+          fiat_ticker:
+            type: "string"
+            example: "usd"
+            description: |
+              Defaults to wallet `fiat_ticker`
+  BtcPrice:
+    type: "object"
+    description: ""
+    properties:
+      fiat_ticker:
+        type: "string"
+        example: "eur"
+      fiat:
+        type: "number"
+        example: 908101
+        description: "price in fiat"
+      fiat_formated:
+        type: "string"
+        example: "9.081,01€"
+      ts:
+        type: "number"
+        example: 1517261111917
+        description: "timestamp"
+  Price:
+    type: "object"
+    description: "Invoice price details"
+    properties:
+      satoshis:
+        type: "integer"
+        example: 20000000
+        description: "price in satoshis"
+      btc:
+        type: "number"
+        format: "float"
+        example: 0.2
+        description: "price in bitcoin"
+      mbtc:
+        type: "number"
+        format: "float"
+        example: 200
+        description: "price in mili bitcoin"
+      fiat:
+        type: "number"
+        example: 233147
+        description: "price in fiat"
+      unit:
+        type: "number"
+        example: 1165735
+        description: "price of 1 bitcoin in fiat"
+      fiat_formated:
+        type: "string"
+        example: "$2,331.47"
+      unit_formated:
+        type: "string"
+        example: "$11,657.35"
+      ticker:
+        type: "string"
+        example: "btc"
+      fiat_ticker:
+        type: "string"
+        example: "usd"
+      ts:
+        type: "number"
+        example: 1516399880173
+        description: "timestamp"
+  ApiResponse:
+    type: "object"
+    properties:
+      code:
+        type: "integer"
+        format: "int32"
+      type:
+        type: "string"
+      message:
+        type: "string"

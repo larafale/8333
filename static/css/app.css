@@ -1,11 +1,13 @@
 html {
   background: whitesmoke;
-  background: #343a40;
+  background: transparent;
 }
 
 body {
   font-family: monospace;
   font-size: 1.2rem;
+  -webkit-font-smoothing: antialiased;
+  background: transparent;
 }
 
 .table tr:first-child td, .table tr:first-child th {
@@ -22,25 +24,60 @@ body {
   margin-right: 10px;
 }
 
-label {
-  color: #858e95;
-  margin-left: 10px;
-  margin-bottom: -3px;
-  padding: 0 10px;
-  border-top-left-radius: 4px;
-  border-top-right-radius: 4px;
-  background: #f5f5f5;
-  font-size: 14px;
-  line-height: 24px;
+.btn-outline-dark:not([disabled]):not(.disabled).active, .btn-outline-dark:not([disabled]):not(.disabled):active, .show>.btn-outline-dark.dropdown-toggle {
+  color: #fff;
 }
 
+label {
+  color: #858e95;
+  margin-bottom: 2px;
+  padding: 0 10px;
+  font-size: 14px;
+}
+
+pre { margin: 0; }
+pre code { padding: 0px !important; }
+
+
+::selection {
+  background: #fec108;
+  color: #fff;
+}
+
+::-moz-selection {
+  background: #fec108;
+  color: #fff;
+}
 
 .toast {
   /*font-size: 10px;*/
 }
 
-.form-control::-webkit-input-placeholder { color: #e0e0e0; }  /* WebKit, Blink, Edge */
-.form-control:-moz-placeholder { color: #e0e0e0; }  /* Mozilla Firefox 4 to 18 */
-.form-control::-moz-placeholder { color: #e0e0e0; }  /* Mozilla Firefox 19+ */
-.form-control:-ms-input-placeholder { color: #e0e0e0; }  /* Internet Explorer 10-11 */
-.form-control::-ms-input-placeholder { color: #e0e0e0; }  /* Microsoft Edge */
+.form-control::-webkit-input-placeholder { color: #b7b7b7; }  /* WebKit, Blink, Edge */
+.form-control:-moz-placeholder { color: #b7b7b7; }  /* Mozilla Firefox 4 to 18 */
+.form-control::-moz-placeholder { color: #b7b7b7; }  /* Mozilla Firefox 19+ */
+.form-control:-ms-input-placeholder { color: #b7b7b7; }  /* Internet Explorer 10-11 */
+.form-control::-ms-input-placeholder { color: #b7b7b7; }  /* Microsoft Edge */
+
+
+.tooltip-inner {
+  background: #343a40;
+  max-width: 500px;
+  padding: 6px;
+}
+
+.tooltip.show {
+  opacity: 1;
+}
+
+
+/* Redoc */
+[_nghost-c0] .redoc-markdown-block pre { background-color: #e0e0e036 !important;  }
+[_nghost-c17] .type-string { color: #fec108 !important; }
+[_nghost-c17] .type-number { color: #fec108 !important; }
+[_nghost-c0] .redoc-markdown-block code { color: #232d33 !important; }
+[_nghost-c17] .redoc-json, [_nghost-c17] .response-sample { color: #fff !important; }
+.code-sample[_ngcontent-c13] pre[_ngcontent-c13] { color: #fff !important; }
+.token.attr-name, .token.builtin, .token.char, .token.inserted, .token.selector, .token.string {color: #fec108 !important;}
+
+

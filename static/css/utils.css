@@ -1,5 +1,20 @@
 .hide { display: none; }
 
+
+
+/* Icons  */ 
+
+.icon-xs { font-size: 13px !important; }
+.icon-sm { font-size: 16px !important; }
+.icon-md { font-size: 40px !important; }
+.icon-xl { font-size: 100px !important; }
+
+/* Text  */ 
+
+.code { font-family: monospace; }
+
+.word-wrap { word-wrap: break-word; }
+
 .cursor { cursor: pointer; }
 
 .nl2br { white-space: pre-line; }
@@ -14,6 +29,47 @@
                                   supported by Chrome and Opera */
 }
 
-.code {
-  font-family: monospace;
+.selectable {
+  -webkit-touch-callout: text; /* iOS Safari */
+    -webkit-user-select: text; /* Safari */
+     -khtml-user-select: text; /* Konqueror HTML */
+       -moz-user-select: text; /* Firefox */
+        -ms-user-select: text; /* Internet Explorer/Edge */
+            user-select: text; /* Non-prefixed version, currently
+                                  supported by Chrome and Opera */
 }
+
+
+/* Animations  */ 
+
+.delay-05 {
+  -webkit-animation-delay: 0.5s;
+  animation-delay: 0.5s;
+}
+.delay-1 {
+  -webkit-animation-delay: 1s;
+  animation-delay: 1s;
+}
+.delay-2 {
+  -webkit-animation-delay: 2s;
+  animation-delay: 2s;
+}
+
+.bend-left { transform: perspective( 800px ) rotateY( 380deg ); }
+.bend-left.shadow { box-shadow: -10px 10px 4px #4a4a4a59; }  
+.bend-right { transform: perspective( 800px ) rotateY( 340deg ); }
+.bend-right.shadow { box-shadow: 10px 10px 4px #4a4a4a59; }
+
+.spiny {
+  display: inline-block;
+  width: 30px;
+  height: 30px;
+  border: 3px solid #fec108;
+  border-radius: 50%;
+  border-top-color: transparent;
+  animation: spiny 1s ease-in-out infinite;
+  -webkit-animation: spiny 1s ease-in-out infinite;
+}
+
+@keyframes spiny { to { -webkit-transform: rotate(360deg); } }
+@-webkit-keyframes spiny { to { -webkit-transform: rotate(360deg); } }

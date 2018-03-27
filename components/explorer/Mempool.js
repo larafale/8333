@@ -56,10 +56,6 @@ export default class Mempool extends Component {
         </tbody>
       </table>
 
-      <style jsx>{`
-
-      `}</style>
-
     </div>)
   }
 }

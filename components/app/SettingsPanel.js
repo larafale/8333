@@ -57,8 +57,10 @@ export default class SettingsPanel extends Component {
     }
 
     return (<div className="box">
-      <h2 className="title">Settings</h2>
-      <hr/>
+      <div className="d-none d-lg-block">
+        <div className="h3">Settings</div>
+        <hr/>
+      </div>
 
       <div>
         <div className="form-group">
@@ -90,10 +92,7 @@ export default class SettingsPanel extends Component {
           Save
         </a>
       </div>
-
-      <style jsx>{`
-          
-      `}</style>  
+ 
 
     </div>)
 

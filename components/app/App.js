@@ -1,5 +1,6 @@
 import 'isomorphic-fetch'
 import React, { Component } from 'react'
+import Router from 'next/router'
 import PropTypes from 'prop-types'
 import Link from 'next/link'
 import Error from 'next/error'
@@ -8,7 +9,7 @@ import { compose, withState, withContext, getContext } from 'recompose'
 import {
     Menu
   , InvoicesPanel
-  , ShopsPanel
+  , WalletsPanel
   , SettingsPanel
   , BillingPanel
 } from './'
@@ -22,38 +23,47 @@ BlackBox
 
 
 @compose(
-    withState('panel', 'setPanel', 'invoices')
+    withState('panel', 'setPanel', '')
   , withContext({  
         panel: PropTypes.string
       , setPanel: PropTypes.func
     }, p => ({
         ...p
+      , setPanel: panel => {
+          p.setPanel(panel)
+          Router.push(`/app?page=app&panel=${panel}`, `/app/${panel}`, { shallow: true })
+        }
     }))
 )
 @getContext({
   server: PropTypes.func,
   user: PropTypes.object,
   panel: PropTypes.string,
+  auth: PropTypes.object,
   authed: PropTypes.bool,
+  url: PropTypes.object,
 })
 export default class Application extends Component {
 
-  componentDidMount() {
+  componentDidMount(){
     const { authed } = this.props
-    !authed && $('.body-content').addClass('bg-dark')
+    !authed && $('.body').addClass('bg-dark')
   }
 
-  componentWillUnmount() {
-    $('.body-content').removeClass('bg-dark')
+  constructor(props){
+    super(props)
+    const { url, setPanel } = props
+    const { query } = url
+    setPanel(query.panel || 'invoices')
   }
 
   render () {
-
-    const { panel, user, authed } = this.props
+    // console.log(this.props)
+    const { panel, user, authed, auth } = this.props
 
     return (<div className="">
 
-      { authed && <BlackBox />}
+      { auth.role == 'root' && <BlackBox />}
 
       <div className="container">
 
@@ -62,13 +72,13 @@ export default class Application extends Component {
         </div>}
 
         
-        { authed && <div className="row py-5">
-          <div className="col-lg-3">
+        { authed && <div className="row py-0 py-lg-5">
+          <div className="panel col-lg-3 p-0 p-lg-3">
             <Menu/>
           </div>
-          <div className="panel col-lg-9">
+          <div className="col-lg-9">
             { panel == 'invoices' && <InvoicesPanel /> }
-            { panel == 'shops' && <ShopsPanel /> }
+            { panel == 'wallets' && <WalletsPanel /> }
             { panel == 'settings' && <SettingsPanel /> }
             { panel == 'billing' && <BillingPanel /> }
           </div>
@@ -79,8 +89,10 @@ export default class Application extends Component {
 
       <style jsx>{`
 
-        .panel {
-          border-left: 2px solid #fec1084d;
+        @media (min-width: 992px){
+          .panel {
+            border-right: 2px solid #eee;
+          }
         }
 
       `}</style>

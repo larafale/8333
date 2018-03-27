@@ -21,7 +21,7 @@ export default class Network extends Component {
 
     return (<div className="">
 
-      <div className="btn-group mr-4" role="group">
+      <div className="btn-group" role="group">
         <button onClick={()=>setNetwork('mainnet')} type="button" className={`btn btn-sm btn-warning ${style.mainnet}`}>mainnet</button>
         <button onClick={()=>setNetwork('testnet')} type="button" className={`btn btn-sm btn-warning ${style.testnet}`}>testnet</button>
       </div>
