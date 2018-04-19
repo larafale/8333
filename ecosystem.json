@@ -1,9 +1,9 @@
 {
     "apps" : [{
-        "name": "web-8333",
+        "name": "8333.io",
         "script": "server.js",
         "env": {
-          "NODE_ENV": "production"
+          "NODE_ENV": "production" 
         }
     }]
 }
