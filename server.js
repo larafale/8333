@@ -1,4 +1,4 @@
-require('dotenv').config()
+require('dotenv').config({ path: `.env.${process.env.NODE_ENV}` })
 const micro =  require('micro')
 const { send } =  require('micro')
 const { router, get, redirect } =  require('./lib/router')

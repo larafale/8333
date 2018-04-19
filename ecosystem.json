@@ -1,0 +1,6 @@
+{
+    "apps" : [{
+        "name": "webapp",
+        "script": "index.js"
+    }]
+}

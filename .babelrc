@@ -1,6 +1,6 @@
 {
   "presets": [
-    ["next/babel", { "styled-jsx": { "optimizeForSpeed": true } }]
+    [ "next/babel", { "styled-jsx": { "optimizeForSpeed": true } }]
   ],
   "plugins": [
     "transform-decorators-legacy"

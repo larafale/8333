@@ -120,7 +120,8 @@ export default class Auth extends Component {
           <div className="d-flex flex-row-reverse">
             <a onClick={this.save} className="btn btn-outline-light w-100" href='javascript:'>
               <i className="fa fa-refresh fa-spin d-none" />
-              Request Access
+              <i className="fa fa-link" />
+              Send Login link
             </a>
           </div>
         </div>}
