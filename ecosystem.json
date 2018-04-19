@@ -1,6 +1,9 @@
 {
     "apps" : [{
-        "name": "webapp",
-        "script": "index.js"
+        "name": "web-8333",
+        "script": "server.js",
+        "env": {
+          "NODE_ENV": "production"
+        }
     }]
 }
