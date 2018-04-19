@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "node server.js",
-    "start": "NODE_ENV=production node server.js",
+    "start": "pm2 startOrReload ecosystem.json",
     "build": "NODE_ENV=production next build",
     "export": "next export",
     "deploy": "next build && now -f --local-config=./now.production.json",
